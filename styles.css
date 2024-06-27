@@ -23,7 +23,9 @@ h1 {
   color: #ff5733;
 }
 
-input[type="number"], input[type="text"], input[type="file"] {
+input[type="number"],
+input[type="text"],
+input[type="file"] {
   padding: 10px;
   margin: 10px 0;
   width: 50px;
@@ -77,15 +79,15 @@ button:hover {
 
 @keyframes fadeIn {
   from {
-      opacity: 0;
+    opacity: 0;
   }
   to {
-      opacity: 1;
+    opacity: 1;
   }
 }
 
 @media (max-width: 600px) {
   .menu {
-      width: 90%;
+    width: 100%;
   }
 }

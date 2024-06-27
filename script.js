@@ -4,7 +4,7 @@ let playerNames = [];
 function proceedToNames() {
   const numPlayers = document.getElementById("num-players").value;
   if (numPlayers < 2 || numPlayers > 10) {
-    alert("Please enter a number of players between 2 and 10.");
+    alert("Iltimos, 2 dan 10 gacha bo'lgan o'yinchilar sonini kiriting.");
     return;
   }
 
@@ -13,8 +13,8 @@ function proceedToNames() {
   for (let i = 0; i < numPlayers; i++) {
     nameInputsDiv.innerHTML += `
       <div>
-        <label>Player ${i + 1} Name: </label>
-        <input type="text" id="player-${i}-name" value="" placeholder="Enter name">
+        <label>O'yinchi ${i + 1} ismi: </label>
+        <input type="text" id="player-${i}-name" value="" placeholder="Ismingizni kiriting">
       </div>
     `;
   }
@@ -30,7 +30,7 @@ function startGame() {
 
   for (let i = 0; i < numPlayers; i++) {
     const nameInput = document.getElementById(`player-${i}-name`);
-    playerNames.push(nameInput.value || `Player ${i + 1}`);
+    playerNames.push(nameInput.value || `O'yinchi ${i + 1}`);
   }
 
   displayGameMenu();
@@ -42,7 +42,7 @@ function displayGameMenu() {
   for (let i = 0; i < players.length; i++) {
     playerInputsDiv.innerHTML += `
       <div>
-        <label>${playerNames[i]} Points: </label>
+        <label>${playerNames[i]} Ochko: </label>
         <input type="number" id="player-${i}-points" value="0" min="0">
       </div>
     `;
@@ -74,11 +74,14 @@ function updateScores() {
   const playerScoresDiv = document.getElementById("player-scores");
   playerScoresDiv.innerHTML = "";
   players.forEach((score, index) => {
-    playerScoresDiv.innerHTML += `<div class="player-score">${playerNames[index]}: ${score} points</div>`;
+    playerScoresDiv.innerHTML += `<div class="player-score">${playerNames[index]}: ${score} ochko</div>`;
   });
 }
 
 function saveGame() {
+  const fileName = prompt("JSON fayl nomini kiriting:", "uno");
+  if (!fileName) return;
+
   const gameData = {
     players: players,
     playerNames: playerNames,
@@ -90,7 +93,7 @@ function saveGame() {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "uno_game.json";
+  a.download = `${fileName}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -115,7 +118,7 @@ function celebrate(playerIndex) {
   document.getElementById("celebration").style.display = "flex";
   document.getElementById(
     "winner"
-  ).innerText = `${playerNames[playerIndex]} reached 500 points!`;
+  ).innerText = `${playerNames[playerIndex]} 500 ochkoga yetdi!`;
 
   const celebrationSound = document.getElementById("celebration-sound");
   celebrationSound.play();
@@ -124,3 +127,9 @@ function celebrate(playerIndex) {
     document.getElementById("celebration").style.display = "none";
   }, 5000);
 }
+
+// Prevent accidental page reload
+window.addEventListener('beforeunload', function (e) {
+  e.preventDefault(); 
+  e.returnValue = '';
+});
