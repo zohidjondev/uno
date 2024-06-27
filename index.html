@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNO Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="start-menu" class="menu">
+      <h1>UNO Calculator</h1>
+      <label for="num-players">Enter number of players:</label>
+      <input type="number" id="num-players" min="2" max="10">
+      <button onclick="proceedToNames()">Next</button>
+      <input type="file" id="file-input" style="display: none;" accept=".json" onchange="loadGame(event)">
+      <button onclick="document.getElementById('file-input').click()">Load Game</button>
+    </div>
+
+    <div id="name-menu" class="menu" style="display: none;">
+      <h1>Enter Player Names</h1>
+      <div id="name-inputs"></div>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+
+    <div id="game-menu" class="menu" style="display: none;">
+      <h1>UNO Calculator</h1>
+      <div id="player-inputs"></div>
+      <button onclick="calculatePoints()">UNO!</button>
+      <button onclick="saveGame()">Save UNO</button>
+      <div id="player-scores"></div>
+    </div>
+
+    <div id="celebration" class="celebration" style="display: none;">
+      <h2>🎉 Congratulations! 🎉</h2>
+      <p id="winner"></p>
+    </div>
+  </div>
+  <audio id="celebration-sound" src="celebration.mp3"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
