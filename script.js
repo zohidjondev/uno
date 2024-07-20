@@ -1,10 +1,32 @@
 let players = [];
 let playerNames = [];
 
+function showAlert(message) {
+  const alertContainer = document.getElementById('custom-alert');
+  const overlay = document.getElementById('overlay');
+  const alertMessage = document.getElementById('alert-message');
+  alertMessage.innerText = message;
+  
+  overlay.style.display = 'flex'; // Show the overlay
+  alertContainer.classList.add('show');
+  
+  // Hide the alert and overlay after 3 seconds
+  setTimeout(() => {
+    closeAlert();
+  }, 4000); // Alert visible for 3 seconds
+}
+
+function closeAlert() {
+  const alertContainer = document.getElementById('custom-alert');
+  const overlay = document.getElementById('overlay');
+  alertContainer.classList.remove('show');
+  overlay.style.display = 'none'; // Hide the overlay
+}
+
 function proceedToNames() {
   const numPlayers = document.getElementById("num-players").value;
   if (numPlayers < 2 || numPlayers > 10) {
-    alert("Iltimos, 2 dan 10 gacha bo'lgan o'yinchilar sonini kiriting.");
+    showAlert("Iltimos, 2 dan 10 gacha bo'lgan o'yinchilar sonini kiriting.");
     return;
   }
 
@@ -13,7 +35,7 @@ function proceedToNames() {
   for (let i = 0; i < numPlayers; i++) {
     nameInputsDiv.innerHTML += `
       <div>
-        <label>O'yinchi ${i + 1} ismi: </label>
+        <label>${i + 1} O'yinchining ismini kiriting: </label>
         <input type="text" id="player-${i}-name" value="" placeholder="Ismingizni kiriting">
       </div>
     `;
@@ -30,7 +52,7 @@ function startGame() {
 
   for (let i = 0; i < numPlayers; i++) {
     const nameInput = document.getElementById(`player-${i}-name`);
-    playerNames.push(nameInput.value || `O'yinchi ${i + 1}`);
+    playerNames.push(nameInput.value || `${i + 1} o'yinchi `);
   }
 
   displayGameMenu();
@@ -42,8 +64,8 @@ function displayGameMenu() {
   for (let i = 0; i < players.length; i++) {
     playerInputsDiv.innerHTML += `
       <div>
-        <label>${playerNames[i]} Ochko: </label>
-        <input type="number" id="player-${i}-points" value="0" min="0">
+        <label>${playerNames[i]}ning Ballari: </label>
+        <input type="number" id="player-${i}-points" value="" min="">
       </div>
     `;
   }
@@ -60,7 +82,7 @@ function calculatePoints() {
     const pointsInput = document.getElementById(`player-${i}-points`);
     const points = parseInt(pointsInput.value);
     players[i] += points;
-    pointsInput.value = "0";
+    pointsInput.value = "";
 
     if (players[i] >= 500) {
       celebrate(i);
@@ -74,12 +96,20 @@ function updateScores() {
   const playerScoresDiv = document.getElementById("player-scores");
   playerScoresDiv.innerHTML = "";
   players.forEach((score, index) => {
-    playerScoresDiv.innerHTML += `<div class="player-score">${playerNames[index]}: ${score} ochko</div>`;
+    playerScoresDiv.innerHTML += `<div class="player-score">${playerNames[index]}: ${score} ballari </div>`;
   });
 }
 
 function saveGame() {
-  const fileName = prompt("JSON fayl nomini kiriting:", "uno");
+  const dateObj = new Date();
+  const month = dateObj.getUTCMonth() + 1; // months from 1-12
+  const day = dateObj.getUTCDate();
+  const year = dateObj.getUTCFullYear();
+
+  // Using template literals:
+  const defaultName = `${year} yil, ${month} oy, :${day} kungi uno oyin`;
+  const fileName = prompt("JSON fayl nomini kiriting:", defaultName);
+
   if (!fileName) return;
 
   const gameData = {
@@ -118,7 +148,7 @@ function celebrate(playerIndex) {
   document.getElementById("celebration").style.display = "flex";
   document.getElementById(
     "winner"
-  ).innerText = `${playerNames[playerIndex]} 500 ochkoga yetdi!`;
+  ).innerText = `${playerNames[playerIndex]} 500 balga yetdilar!`;
 
   const celebrationSound = document.getElementById("celebration-sound");
   celebrationSound.play();
@@ -129,7 +159,7 @@ function celebrate(playerIndex) {
 }
 
 // Prevent accidental page reload
-window.addEventListener('beforeunload', function (e) {
-  e.preventDefault(); 
-  e.returnValue = '';
+window.addEventListener("beforeunload", function (e) {
+  e.preventDefault();
+  e.returnValue = "";
 });
